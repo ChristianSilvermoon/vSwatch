@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>vSwatch</title>
+	<!--
+        <link rel="stylesheet" href="">
+        <link rel="icon" href="img/favicon.png">
+        <script type=module src="js/main.js"></script>
+	-->
+
+	<style>
+		#vSwatchOut {
+			width: 10em;
+			height; 20em;
+		}
+	</style>
+</head>
+<body>
+
+	<center>
+		<h1>vSwatch</h1>
+		<i>Thanks, Vector!</i>
+		<hr/>
+		<input type="color" id="vSwatchIn"></input>
+		<br/>
+		<button id="clickyBoi" >DO EET</button>
+		<br/>
+		<canvas id="vSwatchOut" height=8 width=80></canvas>
+	</center>
+
+	<script>
+		const input = document.getElementById("vSwatchIn");
+		const output = document.getElementById("vSwatchOut"); 
+		const btn = document.getElementById("clickyBoi");
+		const ctx = output.getContext("2d");
+
+
+		ctx.fillStyle = "#FFF"
+		ctx.fillRect(0, 0, output.width, output.height);
+
+		function intFromColorCode(code) {
+			var color = code.split("");
+			if ( color.length == 4 ) {
+				return { 
+					"r": parseInt( `0x${color[1]}${color[1]}` ),
+					"g": parseInt( `0x${color[2]}${color[2]}` ),
+					"b": parseInt( `0x${color[3]}${color[3]}` )
+				}
+			}
+
+			return { 
+				"r": parseInt( `0x${color[1]}${color[2]}` ),
+				"g": parseInt( `0x${color[3]}${color[4]}` ),
+				"b": parseInt( `0x${color[5]}${color[6]}` )
+			}
+		}
+
+		// base 10 -> hex = number.toString(16); (Dumb, I know)
+		function doTheThing() {
+			const baseColor = intFromColorCode(input.value);
+			var colors = [];
+			colors.push(baseColor);	
+			console.log("colors @ start", colors);	
+			var subColor = {
+				"r": Math.ceil(baseColor.r / 11),
+				"g": Math.ceil(baseColor.g / 11),
+				"b": Math.ceil(baseColor.b / 11)
+			};
+
+			for (let i = 0; i < 10; i++) {
+				colors.push({
+					"r": colors[i].r - subColor.r,
+					"g": colors[i].g - subColor.g,
+					"b": colors[i].b - subColor.b
+				})	
+			}
+
+			for ( let i = 0; i < 10; i++) {
+				ctx.fillStyle = `rgb(${colors[i].r}, ${colors[i].g}, ${colors[i].b})`
+				ctx.fillRect( 0 + (i * 8), 0, 8, 8 );
+			}
+
+			console.log(colors);
+		}
+		
+		btn.addEventListener("click", e => { doTheThing() } );
+		
+	</script>
+</body>
+</html>
